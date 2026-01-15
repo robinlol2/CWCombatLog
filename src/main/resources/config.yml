@@ -1,0 +1,11 @@
+timer:
+  seconds: 10
+  include-victim: false
+
+command-block:
+  allow:
+    - "/msg"
+    - "/r"
+    - "/tell"
+    - "/help"
+

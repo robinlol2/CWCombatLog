@@ -1,0 +1,24 @@
+name: CWCombatLog
+version: '1.0.0'
+main: cwcombatlog.nl.cWCombatLog.CWCombatLog
+api-version: '1.21'
+load: STARTUP
+authors: [ ColorWave Studio's ]
+description: a simple combat log plugin
+website: https://colorwave-studios.com/
+softdepend: ["PlaceholderAPI"]
+commands:
+  cwcombatlog:
+    description: CWCombatLog commands
+    usage: /cwcombatlog reload
+    permission: cwcombatlog.admin
+
+permissions:
+  cwcombatlog.admin:
+    description: Allows /cwcombatlog reload
+    default: op
+  cwcombatlog.bypass:
+    description: Bypass command blocking during timer
+    default: op
+  cwcombatlog.combatlog.bypass:
+    default: op
