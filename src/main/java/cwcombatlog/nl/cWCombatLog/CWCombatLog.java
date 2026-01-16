@@ -28,9 +28,9 @@ public final class CWCombatLog extends JavaPlugin {
 
         if(Bukkit.getPluginManager().getPlugin("PlaceholderAPI") != null){
             new CWTimerExpansion(this).register();
-            getLogger().info("PlaceholderAPI is verbonden(%cwcombatlog_in_combat%)");
+            getLogger().info("PlaceholderAPI is connected(%cwcombatlog_in_combat%)");
         }else{
-            getLogger().info("PlaceholderAPI is niet verbonden)");
+            getLogger().info("PlaceholderAPI is not connected)");
         }
     }
 
