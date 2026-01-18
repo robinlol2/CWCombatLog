@@ -1,4 +1,4 @@
-package cwcombatlog.nl.cWCombatLog.Timer;
+package cwcombatlog.nl.cWCombatLog.TimerListener;
 
 
 import cwcombatlog.nl.cWCombatLog.CWCombatLog;
@@ -9,11 +9,11 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.projectiles.ProjectileSource;
 
-public class TimerTrigger implements Listener {
+public class TimerListener implements Listener{
 
     private final CWCombatLog plugin;
 
-    public TimerTrigger(CWCombatLog plugin) {
+    public TimerListener(CWCombatLog plugin){
         this.plugin = plugin;
     }
 
@@ -32,7 +32,9 @@ public class TimerTrigger implements Listener {
             }
         }
 
-        if(attacker == null) return;
+        if(attacker == null){
+            return;
+        }
         if(event.getEntity() instanceof Player p){
             victim = p;
         }
@@ -42,7 +44,9 @@ public class TimerTrigger implements Listener {
                 victim = p;
             }
         }
-        if(victim == null) return;
+        if(victim == null){
+            return;
+        }
 
         int seconds = plugin.getTimerSeconds();
         plugin.startTimer(attacker, seconds);

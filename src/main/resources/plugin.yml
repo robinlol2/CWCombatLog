@@ -1,5 +1,5 @@
 name: CWCombatLog
-version: '1.0.0'
+version: '1.0.1'
 main: cwcombatlog.nl.cWCombatLog.CWCombatLog
 api-version: '1.21'
 load: STARTUP
@@ -9,10 +9,17 @@ website: https://colorwave-studios.com/
 softdepend: ["PlaceholderAPI"]
 commands:
   cwcombatlog:
-    description: CWCombatLog commands
+    description: CWCombatLog reload or help
+    usage: /cwcombatlog
+    permission: cwcombatlog.admin
+  cwcombatlog reload:
+    description: CWCombatLog reload
     usage: /cwcombatlog reload
     permission: cwcombatlog.admin
-
+  cwcombatlog help:
+    description: CWCombatLog help
+    usage: /cwcombatlog help
+    permission: cwcombatlog.admin
 permissions:
   cwcombatlog.admin:
     description: Allows /cwcombatlog reload

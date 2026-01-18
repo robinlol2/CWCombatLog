@@ -1,15 +1,15 @@
-package cwcombatlog.nl.cWCombatLog.papi;
+package cwcombatlog.nl.cWCombatLog.PapiListener;
 
 import cwcombatlog.nl.cWCombatLog.CWCombatLog;
 import me.clip.placeholderapi.expansion.PlaceholderExpansion;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 
-public class CWTimerExpansion extends PlaceholderExpansion {
+public class PaperAPIListener extends PlaceholderExpansion {
 
     private final CWCombatLog plugin;
 
-    public CWTimerExpansion(CWCombatLog plugin) {
+    public PaperAPIListener(CWCombatLog plugin) {
         this.plugin = plugin;
     }
 
@@ -35,7 +35,9 @@ public class CWTimerExpansion extends PlaceholderExpansion {
 
     @Override
     public String onPlaceholderRequest(Player player, @NotNull String params){
-        if(player == null) return "";
+        if(player == null){
+            return "";
+        }
 
         if(params.equalsIgnoreCase("in_combat")){
             return plugin.hasActiveTimer(player) ? "true" : "false";

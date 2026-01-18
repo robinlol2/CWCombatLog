@@ -1,6 +1,8 @@
-package cwcombatlog.nl.cWCombatLog.Timer;
+package cwcombatlog.nl.cWCombatLog.TimerListener;
 
 import cwcombatlog.nl.cWCombatLog.CWCombatLog;
+import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.format.NamedTextColor;
 import org.bukkit.ChatColor;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
@@ -9,11 +11,11 @@ import org.bukkit.event.player.PlayerCommandPreprocessEvent;
 
 import java.util.List;
 
-public class CommandBlocker implements Listener {
+public class CommandListener implements Listener {
 
     private final CWCombatLog plugin;
 
-    public CommandBlocker(CWCombatLog plugin) {
+    public CommandListener(CWCombatLog plugin) {
         this.plugin = plugin;
     }
 
@@ -21,10 +23,14 @@ public class CommandBlocker implements Listener {
     public void onCommand(PlayerCommandPreprocessEvent event) {
 
 
-        if (event.getPlayer().hasPermission("cwcombatlog.bypass")) return;
+        if (event.getPlayer().hasPermission("cwcombatlog.bypass")){
+            return;
+        }
 
 
-        if (!plugin.hasActiveTimer(event.getPlayer())) return;
+        if (!plugin.hasActiveTimer(event.getPlayer())){
+            return;
+        }
 
 
         String full = event.getMessage();
@@ -39,6 +45,6 @@ public class CommandBlocker implements Listener {
         }
 
         event.setCancelled(true);
-        event.getPlayer().sendMessage(ChatColor.RED +"You may not use commands while in combat!");
+        event.getPlayer().sendMessage(Component.text("You may not use commands while in combat!").color(NamedTextColor.RED));
     }
 }

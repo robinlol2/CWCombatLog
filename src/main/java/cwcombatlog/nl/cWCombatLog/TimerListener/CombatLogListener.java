@@ -1,6 +1,8 @@
-package cwcombatlog.nl.cWCombatLog.Timer;
+package cwcombatlog.nl.cWCombatLog.TimerListener;
 
 import cwcombatlog.nl.cWCombatLog.CWCombatLog;
+import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.format.NamedTextColor;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
@@ -20,14 +22,18 @@ public class CombatLogListener implements Listener {
     }
 
     @EventHandler(priority = EventPriority.HIGHEST)
-    public void  onQuit(PlayerQuitEvent event){
+    public void onQuit(PlayerQuitEvent event){
         handleLeve(event.getPlayer());
     }
 
     private void handleLeve(Player player){
-        if(player.hasPermission("cwcombatlog.combatlog.bypass"))return;
+        if(player.hasPermission("cwcombatlog.combatlog.bypass")){
+            return;
+        }
 
-        if(!plugin.hasActiveTimer(player)) return;
+        if(!plugin.hasActiveTimer(player)){
+            return;
+        }
 
         plugin.stopTimer(player);
 
@@ -35,26 +41,22 @@ public class CombatLogListener implements Listener {
 
         try{
             player.setHealth(0.0);
-        }catch (Exception ignored){}
+        }catch (Exception ex){
+            plugin.getLogger().warning("Failed to kill player on combat-log: " + ex.getMessage());
+        }
     }
 
     @EventHandler(priority = EventPriority.HIGHEST)
-    public void  onJoin(PlayerJoinEvent event) {
+    public void onJoin(PlayerJoinEvent event) {
         Player player = event.getPlayer();
 
         if(plugin.consumeCombatLogKill(player.getUniqueId())){
             Bukkit.getScheduler().runTask(plugin, () -> {
                 player.setHealth(0.0);
-                player.sendMessage(ChatColor.RED +"You are dead by CombatLog");
+                player.sendMessage(Component.text("You are dead by CombatLog").color(NamedTextColor.RED));
             });
         }
     }
-
-//    @EventHandler
-//    public void deadStopTimer(PlayerDeathEvent event){
-//        if(!plugin.hasActiveTimer(event.getPlayer())) return;
-//        plugin.stopTimer(event.getPlayer());
-//    }
 
     @EventHandler(priority = EventPriority.HIGHEST)
     public void onDead(PlayerDeathEvent event){

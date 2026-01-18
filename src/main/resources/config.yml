@@ -1,9 +1,9 @@
 timer:
-  seconds: 10
-  include-victim: false
+  seconds: 10  # Combat duration after last hit
+  include-victim: false # If true, victim also gets combat-tagged
 
 command-block:
-  allow:
+  allow: # Allowed during combat
     - "/msg"
     - "/r"
     - "/tell"

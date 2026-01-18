@@ -1,42 +1,48 @@
 package cwcombatlog.nl.cWCombatLog;
 
-import cwcombatlog.nl.cWCombatLog.Timer.CombatLogListener;
-import cwcombatlog.nl.cWCombatLog.Timer.TimerTrigger;
-import cwcombatlog.nl.cWCombatLog.commands.CWTimerCommand;
-import cwcombatlog.nl.cWCombatLog.papi.CWTimerExpansion;
+import cwcombatlog.nl.cWCombatLog.TimerListener.CombatLogListener;
+import cwcombatlog.nl.cWCombatLog.TimerListener.TimerListener;
+import cwcombatlog.nl.cWCombatLog.CommandsListener.CommandListener;
+import cwcombatlog.nl.cWCombatLog.PapiListener.PaperAPIListener;
+import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.format.NamedTextColor;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.scheduler.BukkitTask;
 
-import java.util.*;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Set;
+import java.util.UUID;
+import java.util.HashSet;
 
-public final class CWCombatLog extends JavaPlugin {
+public final class CWCombatLog extends JavaPlugin{
 
-    private final Map<UUID, BukkitTask> activeTimers = new HashMap<>();
+    private Map<UUID, BukkitTask> activeTimers = new HashMap<>();
     private final Set<UUID> pendingCombatLogKills = new HashSet<>();
 
     @Override
     public void onEnable() {
-        // Plugin startup logic
         saveDefaultConfig();
-        getServer().getPluginManager().registerEvents(new TimerTrigger(this), this);
-        if (getCommand("cwcombatlog") != null) {getCommand("cwcombatlog").setExecutor(new CWTimerCommand(this));}
-        getServer().getPluginManager().registerEvents(new cwcombatlog.nl.cWCombatLog.Timer.CommandBlocker(this), this);
+        getServer().getPluginManager().registerEvents(new TimerListener(this), this);
+        if (getCommand("cwcombatlog") != null){
+            getCommand("cwcombatlog").setExecutor(new CommandListener(this));
+        }
+        getServer().getPluginManager().registerEvents(new cwcombatlog.nl.cWCombatLog.TimerListener.CommandListener(this), this);
         getServer().getPluginManager().registerEvents(new CombatLogListener(this), this);
 
         if(Bukkit.getPluginManager().getPlugin("PlaceholderAPI") != null){
-            new CWTimerExpansion(this).register();
+            new PaperAPIListener(this).register();
             getLogger().info("PlaceholderAPI is connected(%cwcombatlog_in_combat%)");
         }else{
-            getLogger().info("PlaceholderAPI is not connected)");
+            getLogger().info("PlaceholderAPI is not connected");
         }
     }
 
     @Override
     public void onDisable() {
-        // Plugin shutdown logic
         activeTimers.values().forEach(BukkitTask::cancel);
         activeTimers.clear();
         pendingCombatLogKills.clear();
@@ -56,9 +62,10 @@ public final class CWCombatLog extends JavaPlugin {
 
     public void stopTimer(Player player) {
         BukkitTask t = activeTimers.remove(player.getUniqueId());
-        if (t != null) t.cancel();
+        if (t != null) {
+            t.cancel();
+        }
     }
-
 
     public void markCombatLogKill(UUID uuid) {
         pendingCombatLogKills.add(uuid);
@@ -77,27 +84,29 @@ public final class CWCombatLog extends JavaPlugin {
 
         boolean wasAlreadyInCombat = activeTimers.containsKey(uuid);
 
-        BukkitTask old = activeTimers.remove(uuid);
-        if (old != null) old.cancel();
+        BukkitTask oldTimer = activeTimers.remove(uuid);
+        if (oldTimer != null){
+            oldTimer.cancel();
+        }
 
         if(!wasAlreadyInCombat){
-            player.sendMessage(ChatColor.RED +"You are in combat");
+            player.sendMessage(Component.text("You are in combat").color(NamedTextColor.RED));
         }
 
         final int[] timeLeft = { seconds };
 
         BukkitTask task = Bukkit.getScheduler().runTaskTimer(this, () -> {
 
-            if (timeLeft[0] <= 0) {
-                player.sendMessage(ChatColor.GREEN +"The combat is over!");
+            if (timeLeft[0] <= 0){
+                player.sendMessage(Component.text("The combat is over!").color(NamedTextColor.GREEN));
 
                 BukkitTask t = activeTimers.remove(uuid);
-                if (t != null) t.cancel();
+                if (t != null){
+                    t.cancel();
+                }
 
                 return;
             }
-
-            //player.sendMessage("Timer: " + timeLeft[0] + " seconde over...");
             timeLeft[0]--;
 
         }, 0L, 20L);
