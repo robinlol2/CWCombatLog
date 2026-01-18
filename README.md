@@ -3,7 +3,7 @@
 CWCombatLog is a lightweight CombatLog / Combat Tag plugin for **Paper 1.21.x**.  
 It prevents players from escaping fights by blocking commands during combat and punishes logging out while combat-tagged.
 
-A key feature of this plugin is the built-in **PlaceholderAPI integration**, so you can show combat status in HUDs, scoreboards, menus, tablists, and more.
+A key feature of this plugin is the built-in **PlaceholderAPI integration**, so you can show combat status in HUDs, scoreboards, menus, tablists, and more. `%cwcombatlog_in_combat%`
 
 ---
 
