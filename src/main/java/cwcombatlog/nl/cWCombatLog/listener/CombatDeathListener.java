@@ -1,4 +1,0 @@
-package cwcombatlog.nl.cWCombatLog.listener;
-
-public class CombatDeathListener {
-}
